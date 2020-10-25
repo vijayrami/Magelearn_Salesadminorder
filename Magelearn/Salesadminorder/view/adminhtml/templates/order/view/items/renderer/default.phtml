@@ -1,0 +1,24 @@
+<?php /** @var \Magento\Sales\Block\Adminhtml\Order\View\Items\Renderer\DefaultRenderer $block */ ?>
+<?php $_item = $block->getItem() ?>
+<?php $block->setPriceDataObject($_item) ?>
+<tr>
+    <?php $i = 0;
+    $columns = $block->getColumns();
+    $lastItemNumber = count($columns) ?>
+    <?php foreach ($columns as $columnName => $columnClass):?>
+        <?php $i++; ?>
+        <td class="<?= /* @noEscape */ $columnClass ?><?= /* @noEscape */ ($i === $lastItemNumber ? ' last' : '') ?>">
+            <?= /* @escapeNotVerified */ $block->getColumnHtml($_item, $columnName) ?>
+                <?php if($columnClass == "col-product-img"){  ?>
+                <?php 
+                $product =  $_item->getProduct();
+                $imagewidth=200;
+                $imageheight=200;
+                $imageHelper = $this->helper('Magento\Catalog\Helper\Image');
+                $image_url = $imageHelper->init($product, 'small_image')->setImageFile($product->getSmallImage())->resize($imagewidth, $imageheight)->getUrl();
+                ?>
+                <img src="<?php echo $image_url;?>" />
+                <?php  } ?>
+            </td>
+    <?php endforeach; ?>
+</tr>
